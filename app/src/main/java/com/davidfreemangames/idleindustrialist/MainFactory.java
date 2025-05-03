@@ -38,7 +38,7 @@ public class MainFactory {
 
     public static synchronized MainFactory getInstance() {
         if (instance == null) {
-            Product wheatProduct = new Product(0, "Wheat", 1, R.drawable.wheat,0);
+            Product wheatProduct = new Product(0, "Wheat", 1, R.drawable.wheat,0, true);
             instance = new MainFactory(wheatProduct);
         }
         return instance;
@@ -97,6 +97,8 @@ public class MainFactory {
         return this.sumMoneyPerSec;
     }
 
+    public ArrayList<Product> getAvailableProducts() {return this.availableProducts;}
+
     public HashMap<String, Technology> getUpgradeTechs() {
         return this.upgradeTechs;
     }
@@ -142,11 +144,11 @@ public class MainFactory {
 
     public void initializeProductList() {
         // Declares the product and technology objects and places them in arrays
-        Product wheatProduct = new Product(0, "Wheat", 1, R.drawable.wheat,0);
-        Product appleProduct = new Product(1, "Apple", 2, R.drawable.apple, 500);
-        Product soybeanProduct = new Product(2, "Soybean", 5, R.drawable.soybean, 2000);
-        Product coffeeProduct = new Product(3, "Coffee", 10, R.drawable.coffee, 5000);
-        Product cottonProduct = new Product(4, "Cotton", 20, R.drawable.cotton, 10000);
+        Product wheatProduct = new Product(0, "Wheat", 1, R.drawable.wheat,0,true);
+        Product appleProduct = new Product(1, "Apple", 2, R.drawable.apple, 500,false);
+        Product soybeanProduct = new Product(2, "Soybean", 5, R.drawable.soybean, 2000,false);
+        Product coffeeProduct = new Product(3, "Coffee", 10, R.drawable.coffee, 5000,false);
+        Product cottonProduct = new Product(4, "Cotton", 20, R.drawable.cotton, 10000,false);
         this.availableProducts.add(wheatProduct);
         this.availableProducts.add(appleProduct);
         this.availableProducts.add(soybeanProduct);

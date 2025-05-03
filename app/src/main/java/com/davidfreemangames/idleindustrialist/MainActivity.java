@@ -61,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements MainFactory.OnMon
     private Button technologiesButton;
     private Button productsButton;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

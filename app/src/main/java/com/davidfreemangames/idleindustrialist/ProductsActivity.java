@@ -40,16 +40,6 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
     TextView productsInstructions;
     Button upgradeButton;
 
-    // Declares the product and technology objects and places them in arrays
-    Product wheatProduct = new Product(0, "Wheat", 1, R.drawable.wheat,0);
-    Product appleProduct = new Product(1, "Apple", 2, R.drawable.apple, 500);
-    Product soybeanProduct = new Product(2, "Soybean", 5, R.drawable.soybean, 2000);
-    Product coffeeProduct = new Product(3, "Coffee", 10, R.drawable.coffee, 5000);
-    Product cottonProduct = new Product(4, "Cotton", 20, R.drawable.cotton, 10000);
-
-    // Declares products list so it can be accessed by all functions
-    ArrayList<Product> products = new ArrayList<>();
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -59,12 +49,7 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
         mainFactory.setOnMoneyChangeListener(this); // Register as a listener
         productsScrollView = findViewById(R.id.productsScrollView);
         productsScrollLinearLayout = findViewById(R.id.productsScrollLinearLayout);
-
-//        products.add(wheatProduct);
-        products.add(appleProduct);
-        products.add(soybeanProduct);
-        products.add(coffeeProduct);
-        products.add(cottonProduct);
+        ArrayList<Product> products = mainFactory.getAvailableProducts();
 
         for(int i = 0; i<Objects.requireNonNull(products).size(); i++){
             Product currentProduct = products.get(i);
@@ -81,9 +66,15 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
             productVal = "$" + productVal + "/tap";
             upgradeMoneyPerTap.setText(productVal);
             upgradeMoneyPerTap.setTextColor(Color.BLACK);
-            String prodPrice = String.valueOf(currentProduct.getPrice());
-            prodPrice = "$" + prodPrice;
-            upgradeButton.setText(prodPrice);
+            if (currentProduct.getIsPurchased()) {
+                String purchasedText = "Purchased";
+                upgradeButton.setText(purchasedText);
+                upgradeButton.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.green));
+            } else {
+                String prodPrice = String.valueOf(currentProduct.getPrice());
+                prodPrice = "$" + prodPrice;
+                upgradeButton.setText(prodPrice);
+            }
             upgradeButton.setOnClickListener(v -> {
                 Button clickedButton = (Button) v;
                 // Fill out code to return the values from the product or the
@@ -92,6 +83,7 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
                 if(mainFactory.getMoney() >= currentProduct.getPrice() && currentProduct.getMoneyPerTap() > mainFactory.getProduct().getMoneyPerTap()){
                     mainFactory.purchaseProduct(currentProduct);
                     this.updateBalance();
+                    currentProduct.setIsPurchased(true);
                     String purchasedText = "Purchased";
                     clickedButton.setText(purchasedText);
                     clickedButton.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.green));

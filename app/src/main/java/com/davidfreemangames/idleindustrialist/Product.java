@@ -21,6 +21,8 @@ public class Product implements Parcelable{
     final private int imageFile;
     // Price to purchase the product upgrade
     private double price;
+    // Boolean saying whether product has been purchased
+    private boolean isPurchased;
 
     private View productTemplate;
     private ImageView productImageView;
@@ -30,12 +32,13 @@ public class Product implements Parcelable{
 
 
 
-    public Product(int id, String name, double moneyPerTap, int imageFile, double price){
+    public Product(int id, String name, double moneyPerTap, int imageFile, double price, Boolean purchased){
         this.id  = id;
         this.name = name;
         this.moneyPerTap = moneyPerTap;
         this.imageFile = imageFile;
         this.price = price;
+        this.isPurchased = purchased;
     }
 
 
@@ -78,6 +81,10 @@ public class Product implements Parcelable{
     public double getPrice(){
         return this.price;
     }
+
+    public boolean getIsPurchased() {return this.isPurchased;}
+
+    public void setIsPurchased(Boolean purchased) {this.isPurchased = purchased;}
 
     public void setProductTemplate(View layoutInflater){
         this.productTemplate = layoutInflater;
