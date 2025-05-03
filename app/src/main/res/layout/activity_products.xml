@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/productUpgrades"
+    tools:context=".ProductsActivity"
+    android:background="@color/white"
+    >
+
+    <ScrollView
+        android:id="@+id/productsScrollView"
+        android:layout_width="404dp"
+        android:layout_height="510dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/productsBackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moneyTextProducts">
+
+        <LinearLayout
+            android:id="@+id/productsScrollLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/productsBackButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="157dp"
+        android:layout_height="62dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="68dp"
+        android:text="@string/app_name"
+        android:textColorLink="#D1DB2A2A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#FFEB3B" />
+
+    <TextView
+        android:id="@+id/moneyTextProducts"
+        android:layout_width="405dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="36dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/productsInstructions"
+        android:layout_width="200dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productsScrollView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
