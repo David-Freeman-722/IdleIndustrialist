@@ -38,13 +38,15 @@ public class TechnologiesActivity extends AppCompatActivity implements MainFacto
     TextView techInstructions;
     Button upgradeButton;
 
-    Technology seedDrill = new Technology(0, "Seed Drill", 0.5, R.drawable.wheat_seed_drill, 1, 0);
-    Technology beehivePollination = new Technology(1, "Beehive Pollination", 2, R.drawable.apple_beehive, 2, 0);
-    Technology steelPlow = new Technology(2, "Steel Plow", 4, R.drawable.steel_plow, 3, 0);
-    Technology terraces = new Technology(3, "Terracing", 10, R.drawable.coffee_terraces, 4, 0);
-    Technology cottonGin = new Technology(4, "Cotton Gin", 20, R.drawable.cotton_gin, 5, 0);
+//    Technology seedDrill = new Technology(0, "Seed Drill", 0.5, R.drawable.wheat_seed_drill, 1, 0);
+//    Technology beehivePollination = new Technology(1, "Beehive Pollination", 2, R.drawable.apple_beehive, 2, 0);
+//    Technology steelPlow = new Technology(2, "Steel Plow", 4, R.drawable.steel_plow, 3, 0);
+//    Technology terraces = new Technology(3, "Terracing", 10, R.drawable.coffee_terraces, 4, 0);
+//    Technology cottonGin = new Technology(4, "Cotton Gin", 20, R.drawable.cotton_gin, 5, 0);
+//
+//    ArrayList<Technology> technologies = new ArrayList<>();
 
-    ArrayList<Technology> technologies = new ArrayList<>();
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +59,7 @@ public class TechnologiesActivity extends AppCompatActivity implements MainFacto
 
         techScrollView =  findViewById(R.id.technologiesScrollView);
         techScrollLinearLayout = findViewById(R.id.technologiesScrollLinearLayout);
-
-        technologies.add(seedDrill);
-        technologies.add(beehivePollination);
-        technologies.add(steelPlow);
-        technologies.add(terraces);
-        technologies.add(cottonGin);
+        ArrayList<Technology> technologies = new ArrayList<>(mainFactory.getAvailableTechs().values());
 
         for(int i = 0; i< Objects.requireNonNull(technologies).size(); i++) {
             Technology currentTech = technologies.get(i);
@@ -90,7 +87,6 @@ public class TechnologiesActivity extends AppCompatActivity implements MainFacto
                     double newTechPrice = mainFactory.purchaseTechUpgrade(currentTech);
                     String newPrice = "$" + String.valueOf(newTechPrice);
                     clickedButton.setText(newPrice);
-//                    this.updateTechPrice(newPrice);
                     this.updateScreen();
 
                 }

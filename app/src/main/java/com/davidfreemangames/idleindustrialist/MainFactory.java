@@ -99,6 +99,8 @@ public class MainFactory {
 
     public ArrayList<Product> getAvailableProducts() {return this.availableProducts;}
 
+    public HashMap<String, Technology> getAvailableTechs() {return this.availableTechs;}
+
     public HashMap<String, Technology> getUpgradeTechs() {
         return this.upgradeTechs;
     }
@@ -157,11 +159,11 @@ public class MainFactory {
     }
 
     public void initializeTechsList() {
-        Technology seedDrill = new Technology(0, "Seed Drill", 0.5, R.drawable.wheat_seed_drill, 1, 0);
-        Technology beehivePollination = new Technology(1, "Beehive Pollination", 2, R.drawable.apple_beehive, 2, 0);
-        Technology steelPlow = new Technology(2, "Steel Plow", 4, R.drawable.steel_plow, 3, 0);
-        Technology terraces = new Technology(3, "Terracing", 10, R.drawable.coffee_terraces, 4, 0);
-        Technology cottonGin = new Technology(4, "Cotton Gin", 20, R.drawable.cotton_gin, 5, 0);
+        Technology seedDrill = new Technology(0, "Seed Drill", 0.5, R.drawable.wheat_seed_drill, 100, 0);
+        Technology beehivePollination = new Technology(1, "Beehive Pollination", 2, R.drawable.apple_beehive, 200, 0);
+        Technology steelPlow = new Technology(2, "Steel Plow", 4, R.drawable.steel_plow, 300, 0);
+        Technology terraces = new Technology(3, "Terracing", 10, R.drawable.coffee_terraces, 400, 0);
+        Technology cottonGin = new Technology(4, "Cotton Gin", 20, R.drawable.cotton_gin, 500, 0);
         this.availableTechs.put(seedDrill.getName(), seedDrill);
         this.availableTechs.put(beehivePollination.getName(), beehivePollination);
         this.availableTechs.put(steelPlow.getName(), steelPlow);
