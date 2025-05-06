@@ -39,7 +39,7 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
     TextView upgradeMoneyPerTap;
     TextView productsInstructions;
     Button upgradeButton;
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -111,7 +111,7 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
         // Sets current balance on the screen
         this.updateBalance();
     }
-
+    @Override
     public void onStart(){
         super.onStart();
         mainFactory = MainFactory.getInstance();
@@ -127,13 +127,26 @@ public class ProductsActivity extends AppCompatActivity implements MainFactory.O
             }
         });
     }
-
+    @Override
     public void onResume(){
         super.onResume();
         updateBalance();
         hideSystemUI();
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        mainFactory.saveUserData();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mainFactory.saveUserData();
+    }
+
+    @Override
     public void onDestroy(){
         super.onDestroy();
         mainFactory.setOnMoneyChangeListener(null);

@@ -12,4 +12,15 @@ public class Products {
     @ColumnInfo
     public String name;
 
+    @ColumnInfo
+    public double moneyPerTap;
+
+    @ColumnInfo
+    public int imageFile;
+
+    @ColumnInfo
+    public double price;
+
+    @ColumnInfo
+    public boolean isPurchased;
 }

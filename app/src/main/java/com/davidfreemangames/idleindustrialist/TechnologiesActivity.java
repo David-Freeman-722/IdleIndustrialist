@@ -153,6 +153,18 @@ public class TechnologiesActivity extends AppCompatActivity implements MainFacto
     }
 
     @Override
+    public void onStop(){
+        super.onStop();
+        mainFactory.saveUserData();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mainFactory.saveUserData();
+    }
+
+    @Override
     public void onMoneyChanged() {
         // This method is called from MainFactory on the main thread
         updateScreen();

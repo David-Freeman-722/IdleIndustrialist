@@ -9,19 +9,16 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface UserInfoDao {
+public interface UserProductsDao {
     // Inserts new userTech row to table
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveUserInfo(UserInfo userInfo);
+    void saveUserProduct(UserProducts userProduct);
 
     // Gets techIds from table
-    @Query("SELECT uid FROM UserInfo")
-    List<Integer> getUserIds();
+    @Query("SELECT productId FROM UserProducts")
+    List<Integer> getUserProdIds();
 
-    @Query("SELECT money FROM UserInfo")
-    List<Double> getUserMoney();
-
-    // Deletes specific userInfo row from table
+    // Deletes specific userTech row from table
     @Delete
-    void deleteUserTechnology(UserInfo userInfo);
+    Void deleteUserTechnology(UserProducts userProd);
 }

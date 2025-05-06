@@ -10,22 +10,9 @@ import com.davidfreemangames.idleindustrialist.Technology;
 
 import java.util.HashMap;
 
-@Entity(tableName = "UserInfo")
-    public class UserInfo {
-        @PrimaryKey
-        public int uid;
-
-        @ColumnInfo(name = "money")
-        public double money;
-
-        @ColumnInfo(name = "sum_money_per_sec")
-        public double sumMoneyPerSecond;
-
-        @ColumnInfo(name = "product_id")
-        public int productId;
-
-//        @ColumnInfo(name = "main_factory")
-//        public MainFactory mainFactory;
-
-
-    }
+@Entity
+public class UserInfo {
+    @PrimaryKey
+    public int uid;
+    public double money;
+}

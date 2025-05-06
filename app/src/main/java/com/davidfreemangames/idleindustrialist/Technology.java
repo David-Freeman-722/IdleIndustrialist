@@ -50,6 +50,8 @@ public class Technology {
 
     public void setPrice(double price) {this.price = price;}
 
+    public void setEconomyOfScale(int econOfScale) {this.economyOfScale = econOfScale;}
+
     public void setTechImageView(ImageView image){
         this.techImageView = image;
     }
@@ -73,6 +75,18 @@ public class Technology {
     public void upgradeMoneyPerSec(){
         this.economyOfScale += 1;
         this.moneyPerSecond = this.economyOfScale * this.baseMoneyPerSecond;
+    }
+
+    public void calculateMoneyPerSec(){
+        this.moneyPerSecond = this.economyOfScale * this.baseMoneyPerSecond;
+    }
+
+    public void calculatePrice(){
+        MainFactory mainFactory = MainFactory.getInstance();
+        double newPrice = this.price;
+        for(int i=0; i<this.economyOfScale; i++){
+            newPrice = mainFactory.techPriceIncrease(newPrice);
+        }
     }
 
 }
