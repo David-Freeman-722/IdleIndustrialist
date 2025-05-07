@@ -1,13 +1,8 @@
 package com.davidfreemangames.idleindustrialist;
-
-import static android.content.Intent.getIntent;
 import static com.davidfreemangames.idleindustrialist.R.*;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,41 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.room.Room;
-
-import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-//import data.DatabaseHelper;
-//import data.MainDatabase;
-import data.MainDatabase;
-import data.UserInfo;
-//import data.UserInfoDao;
-import data.UserProducts;
-import data.UserProductsDao;
-import data.UserTechnologies;
-import data.UserTechnologiesDao;
 
 public class MainActivity extends AppCompatActivity implements MainFactory.OnMoneyChangeListener{
     // Declares global use variables for use in app (views, technology and product objects, current money object)
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-
+    // Singleton class that holds all of my app data and functionality
     MainFactory mainFactory;
-
-    ArrayList<Product> products;
-
-    Handler autoMoneyGenHandler = new Handler();
-    Runnable autoMoneyGenRunnable;
 
     // Declares the views on main screen
     private ImageButton productImageButton;
@@ -72,11 +38,12 @@ public class MainActivity extends AppCompatActivity implements MainFactory.OnMon
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        hideSystemUI();
 
-        mainFactory = MainFactory.getInstance();
+        mainFactory = ((MainApplication) getApplicationContext()).getMainFactory();
         mainFactory.initializeDatabase(getApplicationContext());
         mainFactory.setOnMoneyChangeListener(this);
+
+        hideSystemUI();
 
         productImageButton = findViewById(id.productButton);
         instructions = findViewById(id.instructions);

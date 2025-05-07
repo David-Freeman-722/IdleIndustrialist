@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import data.MainDatabase;
-import data.UserInfo;
-import data.UserInfoDao;
+import data.UserDetails;
+import data.UserDetailsDao;
 import data.UserProducts;
 import data.UserProductsDao;
 import data.UserTechnologies;
@@ -40,7 +40,7 @@ public class MainFactory {
 
     private List<Integer> databaseProdIds;
     private List<Integer> databaseTechIds;
-    private List<Integer> databaseEcondsOfScale;
+    private List<Integer> databaseEconsOfScale;
     private List<Integer> databaseUserIds;
     private List<Double> databaseMoneys;
     private HashMap<String, Technology> upgradeTechs = new HashMap<>();
@@ -168,41 +168,44 @@ public class MainFactory {
 
     public double techPriceIncrease(double price) {
         // Quadratic function to increase price for autoscaling
-        return (1 + price) * price;
+        return (1 + price) * 2;
     }
 
     public void initializeProductList() {
         // Declares the product and technology objects and places them in arrays
         Product wheatProduct = new Product(0, "Wheat", 1, R.drawable.wheat, 0, true);
-        Product appleProduct = new Product(1, "Apple", 2, R.drawable.apple, 500, false);
-        Product soybeanProduct = new Product(2, "Soybean", 5, R.drawable.soybean, 2000, false);
-        Product coffeeProduct = new Product(3, "Coffee", 10, R.drawable.coffee, 5000, false);
-        Product cottonProduct = new Product(4, "Cotton", 20, R.drawable.cotton, 10000, false);
+        Product appleProduct = new Product(1, "Apple", 2, R.drawable.apple, 1, false);
+        Product soybeanProduct = new Product(2, "Soybean", 5, R.drawable.soybean, 2, false);
+        Product coffeeProduct = new Product(3, "Coffee", 10, R.drawable.coffee, 5, false);
+        Product cottonProduct = new Product(4, "Cotton", 20, R.drawable.cotton, 10, false);
         this.availableProducts.add(wheatProduct);
         this.availableProducts.add(appleProduct);
         this.availableProducts.add(soybeanProduct);
         this.availableProducts.add(coffeeProduct);
         this.availableProducts.add(cottonProduct);
-
         // If there is a table for Products in database, select which ones are purchased
         if (databaseProdIds != null){
+            int highestIncomeProdId = 0;
             // Loops through available products
             for (Product prod : availableProducts) {
                 for (int id : databaseProdIds) {
                     if (prod.getId() == id) {
                         prod.setIsPurchased(true);
+                        highestIncomeProdId = prod.getId();
                     }
                 }
             }
+            Product highestEarningPurchasedProduct = availableProducts.get(highestIncomeProdId);
+            this.setProduct(highestEarningPurchasedProduct);
         }
     }
 
     public void initializeTechsList() {
         Technology seedDrill = new Technology(0, "Seed Drill", 0.5, R.drawable.wheat_seed_drill, 100, 0);
-        Technology beehivePollination = new Technology(1, "Beehive Pollination", 2, R.drawable.apple_beehive, 200, 0);
-        Technology steelPlow = new Technology(2, "Steel Plow", 4, R.drawable.steel_plow, 300, 0);
-        Technology terraces = new Technology(3, "Terracing", 10, R.drawable.coffee_terraces, 400, 0);
-        Technology cottonGin = new Technology(4, "Cotton Gin", 20, R.drawable.cotton_gin, 500, 0);
+        Technology beehivePollination = new Technology(1, "Beehive Pollination", 2, R.drawable.apple_beehive, 300, 0);
+        Technology steelPlow = new Technology(2, "Steel Plow", 4, R.drawable.steel_plow, 500, 0);
+        Technology terraces = new Technology(3, "Terracing", 10, R.drawable.coffee_terraces, 1000, 0);
+        Technology cottonGin = new Technology(4, "Cotton Gin", 20, R.drawable.cotton_gin, 2000, 0);
         this.availableTechs.put(seedDrill.getName(), seedDrill);
         this.availableTechs.put(beehivePollination.getName(), beehivePollination);
         this.availableTechs.put(steelPlow.getName(), steelPlow);
@@ -213,12 +216,21 @@ public class MainFactory {
             // Loops through available techs
             for(Technology tech: availableTechs.values()){
                 for(int i=0; i<databaseTechIds.size(); i++){
-                    int id = databaseTechIds.get(i);
-                    int econOfScale = databaseEcondsOfScale.get(i);
-                    if(tech.getId() == id){
+                    if(tech.getId() == databaseTechIds.get(i)) {
+                        int id = databaseTechIds.get(i);
+                        int econOfScale = databaseEconsOfScale.get(i);
+                        System.out.println("UDATING TECH INFO ID " + id + " econ of scale " + econOfScale);
                         tech.setEconomyOfScale(econOfScale);
-                        tech.calculateMoneyPerSec();
-                        tech.calculatePrice();
+                        double newPrice = tech.getPrice();
+                        for (i = 0; i < tech.getEconomyOfScale(); i++) {
+                            newPrice = techPriceIncrease(newPrice);
+                        }
+                        tech.setPrice(newPrice);
+                        double moneyPerSecond = tech.getBaseMoneyPerSecond() * tech.getEconomyOfScale();
+                        tech.setMoneyPerSecond(moneyPerSecond);
+                        upgradeTechs.put(tech.getName(), tech);
+                        System.out.println(tech.getEconomyOfScale());
+                        System.out.println(tech.getPrice());
                     }
                 }
             }
@@ -251,8 +263,13 @@ public class MainFactory {
     public void fetchUserTechnologiesInfo() {
         databaseExecutor.execute(() -> {
             UserTechnologiesDao userTechDao = database.userTechDao();
-            databaseTechIds = userTechDao.getTechIds();
-            databaseEcondsOfScale = userTechDao.getEconsOfScale();
+            List<Integer> fetchedDatabaseTechIds = userTechDao.getTechIds();
+            List<Integer> fetchedDatabaseEconsOfScale = userTechDao.getEconsOfScale();
+            mainThreadHandler.post(() -> {
+                databaseTechIds = fetchedDatabaseTechIds;
+                databaseEconsOfScale = fetchedDatabaseEconsOfScale;
+                initializeTechsList();
+            });
         });
     }
 
@@ -260,28 +277,17 @@ public class MainFactory {
     public void fetchUserProductsInfo() {
         databaseExecutor.execute(() -> {
             UserProductsDao userProdDao = database.userProdsDao();
-            databaseProdIds = userProdDao.getUserProdIds();
+            List<Integer> fetchedProdIds = userProdDao.getUserProdIds();
+            mainThreadHandler.post(() -> {
+                databaseProdIds = fetchedProdIds;
+                initializeProductList();
+            });
         });
-
-        System.out.println("THIS IS USER PRODUCT IDS");
-        System.out.println(databaseProdIds);
     }
-
-//    public void fetchUserInfo() {
-//        databaseExecutor.execute(() -> {
-//            UserInfoDao userInfoDao = database.userInfoDao();
-//            databaseUserIds = userInfoDao.getUserIds();
-//            databaseMoneys = userInfoDao.getUserMoney();
-//        });
-//    }
 
     public void initializeUserData() {
         fetchUserTechnologiesInfo();
         fetchUserProductsInfo();
-//        fetchUserInfo();
-        initializeProductList();
-        initializeTechsList();
-//        initializeUserInfo();
     }
 
     public void saveUserData() {
@@ -297,9 +303,6 @@ public class MainFactory {
                 saveUserProduct(userProd, latch);
             }
         }
-        fetchUserProductsInfo();
-        System.out.println("THESE ARE MY DATABASE PRODUCT IDS");
-        System.out.println(databaseProdIds);
 
         // Saves technologies to database
         for(Technology tech: upgradeTechs.values()){
@@ -308,12 +311,6 @@ public class MainFactory {
             userTech.techEconomyOfScale = tech.getEconomyOfScale();
             saveUserTechnology(userTech, latch);
         }
-
-//        // Saves user info to database
-//        UserInfo userInfo = new UserInfo();
-//        userInfo.money = this.getMoney();
-//        userInfo.uid = this.getUserId();
-//        saveUserInfo(userInfo);
     }
 
     // Method to save a UserTechnology (runs on a background thread)
@@ -331,17 +328,7 @@ public class MainFactory {
             UserProductsDao userProdDao = database.userProdsDao();
             userProdDao.saveUserProduct(userProd);
             latch.countDown();
-            System.out.println("ID AFTER SAVING TO DB");
-            System.out.println(userProdDao.getUserProdIds());
         });
     }
-
-//    public void saveUserInfo(UserInfo userInfo){
-//        databaseExecutor.execute(() -> {
-//            UserInfoDao userInfoDao = database.userInfoDao();
-//            userInfoDao.saveUserInfo(userInfo);
-//        });
-//    }
-
 }
 

@@ -52,6 +52,10 @@ public class Technology {
 
     public void setEconomyOfScale(int econOfScale) {this.economyOfScale = econOfScale;}
 
+    public void setPrice(int price) {this.price = price;}
+
+    public void setMoneyPerSecond(double monPerSec) {this.moneyPerSecond = monPerSec;}
+
     public void setTechImageView(ImageView image){
         this.techImageView = image;
     }
