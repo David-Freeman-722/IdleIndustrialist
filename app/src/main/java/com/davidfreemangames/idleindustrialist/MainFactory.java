@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import data.MainDatabase;
-import data.UserDetails;
-import data.UserDetailsDao;
 import data.UserProducts;
 import data.UserProductsDao;
 import data.UserTechnologies;
